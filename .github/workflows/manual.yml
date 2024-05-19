@@ -1,0 +1,41 @@
+name: Deploy to Droplet
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.x'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build React app
+        run: npm run build
+     
+      - name: Copy package.jspn 
+        run: cp package.json ../
+        
+      - name: Copy .ENV 
+        run: cp .env dist/
+
+      - name: Deploy to Droplet
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.DROPLET_SSH_HOST }}
+          username: ${{ secrets.DROPLET_SSH_USER }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          key: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
+          source: "dist/"  # Change this path if your build output directory is different
+          target: "/var/www/roomeo/service" 
