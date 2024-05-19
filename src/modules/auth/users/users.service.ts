@@ -149,10 +149,10 @@ export class UsersService {
       if (res) {
         if (res.otp_code === verifyToken.otp_code) {
           const createWalletRes = await this.walletService.createWallet(res);
-          await this.notificationsService.notifyEmailSubscription({
-            email: res.email,
-            name: `${res.first_name} ${res.last_name}`,
-          });
+          // await this.notificationsService.notifyEmailSubscription({
+          //   email: res.email,
+          //   name: `${res.first_name} ${res.last_name}`,
+          // });
 
           if (createWalletRes) {
             const refresh_token = await this.generateRefreshToken(res);
@@ -205,10 +205,10 @@ export class UsersService {
         { otp_code: otp, otp_expiry: expiry },
       );
 
-      await this.notificationsService.notifyEmail({
-        email: theuser.email,
-        text: otp,
-      });
+      // await this.notificationsService.notifyEmail({
+      //   email: theuser.email,
+      //   text: otp,
+      // });
 
       const verification_token = this.jwtService.sign(
         { email: dd.email, code: dd.otp_code, expiry: dd.otp_expiry },
