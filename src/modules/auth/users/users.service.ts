@@ -64,10 +64,10 @@ export class UsersService {
         User,
       );
 
-      await this.notificationsService.notifyEmail({
-        email: dUser.email,
-        text: entity.otp_code,
-      });
+      // await this.notificationsService.notifyEmail({
+      //   email: dUser.email,
+      //   text: entity.otp_code,
+      // });
       const verification_token = this.jwtService.sign(
         { email: dd.email, code: dd.otp_code, expiry: dd.otp_expiry },
         {
